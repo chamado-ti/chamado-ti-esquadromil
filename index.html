@@ -82,6 +82,9 @@
   <h1>TI - Abertura de Chamados</h1>
 
   <form id="form">
+    <label for="nome">Nome:</label>
+    <input type="text" name="nome" id="nome" required />
+
     <label for="setor">Setor:</label>
     <select name="setor" id="setor" required>
       <option value="">Selecione</option>
@@ -100,9 +103,6 @@
       <option>Diretoria</option>
     </select>
 
-    <label for="ramal">Ramal:</label>
-    <input type="text" name="ramal" id="ramal" required>
-
     <label for="problema">Tipo de Problema:</label>
     <select name="problema" id="problema" required>
       <option value="">Selecione</option>
@@ -120,6 +120,14 @@
       <label for="outro">Descreva o problema:</label>
       <textarea name="outro" id="outro" rows="4"></textarea>
     </div>
+
+    <label for="urgencia">Urgência:</label>
+    <select name="urgencia" id="urgencia" required>
+      <option value="">Selecione</option>
+      <option>Baixa</option>
+      <option>Média</option>
+      <option>Alta</option>
+    </select>
 
     <button type="submit">Enviar Chamado</button>
 
