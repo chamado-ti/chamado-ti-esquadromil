@@ -140,7 +140,7 @@
   </form>
 
   <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbzTDXsFY7xN0iLD3oSv3RQt9ua14Chp_MWegCJT-tWuRHdcGWOdieb2QLr6XA3t5AYd/exec';
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbzoJwcokeYM6B4bnpFX8e6cQYnljHuXscgXPwCpl7MOG6BzJv8GXRe56x0AKDIIcXI2/exec';
     const form = document.getElementById('form');
     const outroInput = document.getElementById('outro-problema');
     const problemaSelect = document.getElementById('problema');
@@ -161,7 +161,7 @@
       try {
         const response = await fetch(scriptURL, {
           method: 'POST',
-          body: formData
+          body: new formData(form)
         });
 
         const resultText = await response.text();
@@ -193,3 +193,4 @@
   </script>
 </body>
 </html>
+
