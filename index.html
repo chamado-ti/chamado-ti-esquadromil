@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Chamado TI - Esquadromil</title>
   <style>
     body {
@@ -11,7 +11,6 @@
       background: linear-gradient(to bottom right, #3d32f4, #6561ff);
       color: #fff;
       text-align: center;
-      padding: 0;
     }
 
     header {
@@ -34,7 +33,7 @@
       border-radius: 12px;
       max-width: 500px;
       margin: 20px auto;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     }
 
     label {
@@ -44,17 +43,19 @@
       text-align: left;
     }
 
-    input, select, textarea {
+    input,
+    select,
+    textarea {
       width: 100%;
       padding: 10px;
       border: none;
       border-radius: 6px;
       margin-top: 5px;
+      font-size: 14px;
+      box-sizing: border-box;
     }
 
-    /* Ajuste solicitado para deixar o campo Nome do mesmo tamanho */
     input[type="text"] {
-      box-sizing: border-box;
       height: 42px;
     }
 
@@ -67,12 +68,18 @@
       padding: 10px 20px;
       border-radius: 6px;
       cursor: pointer;
+      transition: all 0.2s ease-in-out;
+    }
+
+    button:hover {
+      background-color: #eee;
+      transform: scale(1.03);
     }
 
     #mensagem {
       margin-top: 20px;
       font-weight: bold;
-      color: #00ff88;
+      transition: opacity 0.3s ease;
     }
 
     .hidden {
@@ -136,27 +143,24 @@
     </select>
 
     <button type="submit">Enviar Chamado</button>
-
     <div id="mensagem"></div>
   </form>
 
   <script>
-    const scriptURL = 'https://script.google.com/macros/library/d/1FPmg0W7CxpVF-sGTPrxiTIIJvFRFTFIhdqj5SZWrP7iCX_O7EgZ-FI3S/7';
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbw8bt5spo8b1Ve77XhYHC0N9jiMH6c-je-84C1zvsld1gHCcpUxAm-K9I1ySlW4huiJ/exec';
     const form = document.getElementById('form');
     const outroInput = document.getElementById('outro-problema');
     const problemaSelect = document.getElementById('problema');
     const mensagem = document.getElementById('mensagem');
 
     problemaSelect.addEventListener('change', () => {
-      if (problemaSelect.value === 'outros') {
-        outroInput.classList.remove('hidden');
-      } else {
-        outroInput.classList.add('hidden');
-      }
+      outroInput.classList.toggle('hidden', problemaSelect.value !== 'outros');
     });
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
+      mensagem.textContent = "Enviando...";
+      mensagem.style.color = "#fff";
 
       const data = new FormData(form);
 
@@ -171,7 +175,6 @@
         if (result.result === "success") {
           mensagem.textContent = "Chamado enviado com sucesso!";
           mensagem.style.color = "#00ff88";
-          mensagem.style.opacity = 1;
           form.reset();
           outroInput.classList.add("hidden");
         } else {
@@ -180,10 +183,8 @@
       } catch (err) {
         mensagem.textContent = "Erro ao enviar chamado. Tente novamente.";
         mensagem.style.color = "#ff4444";
-        mensagem.style.opacity = 1;
       }
     });
   </script>
 </body>
 </html>
-
