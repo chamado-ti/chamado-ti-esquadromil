@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Chamado TI - Esquadromil</title>
   <style>
     body {
@@ -11,7 +11,6 @@
       background: linear-gradient(to bottom right, #3d32f4, #6561ff);
       color: #fff;
       text-align: center;
-      padding: 0;
     }
 
     header {
@@ -34,7 +33,7 @@
       border-radius: 12px;
       max-width: 500px;
       margin: 20px auto;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     }
 
     label {
@@ -44,16 +43,19 @@
       text-align: left;
     }
 
-    input, select, textarea {
+    input,
+    select,
+    textarea {
       width: 100%;
       padding: 10px;
       border: none;
       border-radius: 6px;
       margin-top: 5px;
+      font-size: 14px;
+      box-sizing: border-box;
     }
 
     input[type="text"] {
-      box-sizing: border-box;
       height: 42px;
     }
 
@@ -66,12 +68,18 @@
       padding: 10px 20px;
       border-radius: 6px;
       cursor: pointer;
+      transition: all 0.2s ease-in-out;
+    }
+
+    button:hover {
+      background-color: #eee;
+      transform: scale(1.03);
     }
 
     #mensagem {
       margin-top: 20px;
       font-weight: bold;
-      color: #00ff88;
+      transition: opacity 0.3s ease;
     }
 
     .hidden {
@@ -146,22 +154,24 @@
     const problemaSelect = document.getElementById('problema');
     const mensagem = document.getElementById('mensagem');
 
+    // Mostra campo "outros" quando selecionado
     problemaSelect.addEventListener('change', () => {
-      if (problemaSelect.value === 'outros') {
-        outroInput.classList.remove('hidden');
-      } else {
-        outroInput.classList.add('hidden');
-      }
+      outroInput.classList.toggle('hidden', problemaSelect.value !== 'outros');
     });
 
+    // Envio do formulário
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
+
+      mensagem.textContent = "Enviando...";
+      mensagem.style.color = "#fff";
+
       const formData = new FormData(form);
 
       try {
         const response = await fetch(scriptURL, {
           method: 'POST',
-          body: new formData(form)
+          body: formData
         });
 
         const resultText = await response.text();
@@ -171,13 +181,12 @@
         try {
           result = JSON.parse(resultText);
         } catch {
-          result = { result: "success" };
+          result = { result: "success" }; // fallback se não vier JSON
         }
 
         if (result.result === "success") {
           mensagem.textContent = "Chamado enviado com sucesso!";
           mensagem.style.color = "#00ff88";
-          mensagem.style.opacity = 1;
           form.reset();
           outroInput.classList.add("hidden");
         } else {
@@ -187,10 +196,8 @@
         console.error("Erro ao enviar:", err);
         mensagem.textContent = "Erro ao enviar chamado. Tente novamente.";
         mensagem.style.color = "#ff4444";
-        mensagem.style.opacity = 1;
       }
     });
   </script>
 </body>
 </html>
-
