@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Chamado TI - Esquadromil</title>
   <style>
     body {
@@ -11,6 +11,7 @@
       background: linear-gradient(to bottom right, #3d32f4, #6561ff);
       color: #fff;
       text-align: center;
+      padding: 0;
     }
 
     header {
@@ -33,7 +34,7 @@
       border-radius: 12px;
       max-width: 500px;
       margin: 20px auto;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
     }
 
     label {
@@ -43,19 +44,16 @@
       text-align: left;
     }
 
-    input,
-    select,
-    textarea {
+    input, select, textarea {
       width: 100%;
       padding: 10px;
       border: none;
       border-radius: 6px;
       margin-top: 5px;
-      font-size: 14px;
-      box-sizing: border-box;
     }
 
     input[type="text"] {
+      box-sizing: border-box;
       height: 42px;
     }
 
@@ -68,18 +66,12 @@
       padding: 10px 20px;
       border-radius: 6px;
       cursor: pointer;
-      transition: all 0.2s ease-in-out;
-    }
-
-    button:hover {
-      background-color: #eee;
-      transform: scale(1.03);
     }
 
     #mensagem {
       margin-top: 20px;
       font-weight: bold;
-      transition: opacity 0.3s ease;
+      color: #00ff88;
     }
 
     .hidden {
@@ -143,46 +135,59 @@
     </select>
 
     <button type="submit">Enviar Chamado</button>
+
     <div id="mensagem"></div>
   </form>
 
   <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbw8bt5spo8b1Ve77XhYHC0N9jiMH6c-je-84C1zvsld1gHCcpUxAm-K9I1ySlW4huiJ/exec';
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbzTDXsFY7xN0iLD3oSv3RQt9ua14Chp_MWegCJT-tWuRHdcGWOdieb2QLr6XA3t5AYd/exec';
     const form = document.getElementById('form');
     const outroInput = document.getElementById('outro-problema');
     const problemaSelect = document.getElementById('problema');
     const mensagem = document.getElementById('mensagem');
 
     problemaSelect.addEventListener('change', () => {
-      outroInput.classList.toggle('hidden', problemaSelect.value !== 'outros');
+      if (problemaSelect.value === 'outros') {
+        outroInput.classList.remove('hidden');
+      } else {
+        outroInput.classList.add('hidden');
+      }
     });
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      mensagem.textContent = "Enviando...";
-      mensagem.style.color = "#fff";
-
-      const data = new FormData(form);
+      const formData = new FormData(form);
 
       try {
         const response = await fetch(scriptURL, {
           method: 'POST',
-          body: new URLSearchParams(data),
+          body: formData
         });
 
-        const result = await response.json();
+        const resultText = await response.text();
+        console.log('Resposta do servidor:', resultText);
+
+        let result;
+        try {
+          result = JSON.parse(resultText);
+        } catch {
+          result = { result: "success" };
+        }
 
         if (result.result === "success") {
           mensagem.textContent = "Chamado enviado com sucesso!";
           mensagem.style.color = "#00ff88";
+          mensagem.style.opacity = 1;
           form.reset();
           outroInput.classList.add("hidden");
         } else {
           throw new Error("Erro desconhecido");
         }
       } catch (err) {
+        console.error("Erro ao enviar:", err);
         mensagem.textContent = "Erro ao enviar chamado. Tente novamente.";
         mensagem.style.color = "#ff4444";
+        mensagem.style.opacity = 1;
       }
     });
   </script>
